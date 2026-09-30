@@ -28,20 +28,26 @@ Les **tarifs réglementés** (Tarif Bleu : Base, HP/HC, Tempo) ne sont pas gér�
 
 | Contrat | Options | État de la vérification |
 |---|---|---|
-| Zen Online | Base, Heures Creuses | ✅ lecture vérifiée sur les tableaux du vrai PDF |
-| Zen Fixe | Base, Heures Creuses | ✅ lecture vérifiée sur les tableaux du vrai PDF (cellules fusionnées gérées) |
-| Zen Week-End | Week-End, Heures Creuses + WE, Flex | ⚠️ écrit d'après la description du PDF, à confirmer sur le vrai fichier |
-| Zen Week-End Plus | WE + jour choisi, Heures Creuses + WE + jour choisi | ⚠️ idem |
-| Zen Estival | Heures super creuses été / hiver | ⚠️ idem |
-| Vert Électrique | Base, Heures Creuses | ⚠️ idem |
-| Vert Électrique Week-End | Week-End, Heures Creuses + WE | ⚠️ idem |
-| Vert Électrique Auto | Heures Creuses | ⚠️ idem |
-| Vert Électrique Régional | Base, Heures Creuses | ⚠️ idem |
+| Zen Online | Base, Heures Creuses | ✅ lu sur le vrai PDF |
+| Zen Fixe | Base, Heures Creuses | ✅ lu sur le vrai PDF (cellules fusionnées gérées) |
+| Zen Week-End | Week-End, Heures Creuses + WE, Flex | ✅ testé sur les tableaux extraits du vrai PDF |
+| Zen Week-End Plus | WE + jour choisi, Heures Creuses + WE + jour choisi | ✅ idem |
+| Zen Estival | Heures super creuses été / hiver | ✅ idem |
+| Vert Électrique | Base, Heures Creuses | ✅ lu sur le vrai PDF |
+| Vert Électrique Week-End | Week-End, Heures Creuses + WE | ✅ lu sur le vrai PDF |
+| Vert Électrique Auto | Heures Creuses | ✅ lu sur le vrai PDF |
+| Vert Électrique Régional | Base, Heures Creuses | ✅ lu sur le vrai PDF |
 
-Pour les contrats marqués ⚠️, la lecture est protégée par des garde-fous (valeurs plausibles,
-« heures creuses ≤ heures pleines »…) : en cas de doute, l'intégration **échoue avec un message
-clair** plutôt que d'afficher de faux tarifs. Pour vérifier un contrat sur votre installation,
-lancez `python outils/verifier_pdf.py` (voir plus bas) et ouvrez une *issue* avec le rapport.
+Vérification faite le 30/09/2026 avec `outils/verifier_pdf.py` sur les PDF publiés par EDF. Les
+prix sont recopiés tels que publiés : par exemple, le PDF « Vert Électrique Week-End » indique
+39,88 €/mois (24 kVA) et 47,40 €/mois (30 kVA) pour l'option Heures Creuses + Week-End, alors
+que l'option Week-End affiche 39,14 et 46,47 pour les mêmes puissances ; l'intégration reprend
+la valeur du PDF sans la corriger.
+
+La lecture est protégée par des garde-fous (valeurs plausibles, « heures creuses ≤ heures
+pleines »…) : si EDF change la mise en page, l'intégration **échoue avec un message clair**
+plutôt que d'afficher de faux tarifs. Pour vérifier un contrat sur votre installation, lancez
+`python outils/verifier_pdf.py` (voir plus bas) et ouvrez une *issue* avec le rapport.
 
 ## Installation
 

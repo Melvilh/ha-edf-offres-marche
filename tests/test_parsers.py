@@ -13,10 +13,16 @@ from custom_components.edf_tarifs_offres_marche.parsers import (
 )
 
 from .helpers import (
+    EXPECTED_ZEN_ESTIVAL,
     EXPECTED_ZEN_FIXE,
     EXPECTED_ZEN_ONLINE,
+    EXPECTED_ZEN_WEEK_END,
+    EXPECTED_ZEN_WEEK_END_PLUS,
+    REAL_ZEN_ESTIVAL,
     REAL_ZEN_FIXE,
     REAL_ZEN_ONLINE,
+    REAL_ZEN_WEEK_END,
+    REAL_ZEN_WEEK_END_PLUS,
     SYNTH_TITRES,
     build_pdf,
     faux_tableau,
@@ -38,6 +44,28 @@ def test_zen_fixe_reel_avec_cellules_fusionnees():
     assert grille.tarifs["base"][6]["prix_kwh"] == 18.47  # complété depuis la ligne 3 kVA
     assert grille.tarifs["base"][36]["prix_kwh"] == 18.35  # complété depuis la ligne 9 kVA
     assert grille.tarifs["hc_hp"][36]["prix_kwh_hc"] == 15.07
+
+
+@pytest.mark.parametrize(
+    ("offre", "tables", "attendu"),
+    [
+        ("ZEN_WEEK_END", REAL_ZEN_WEEK_END, EXPECTED_ZEN_WEEK_END),
+        ("ZEN_WEEK_END_PLUS", REAL_ZEN_WEEK_END_PLUS, EXPECTED_ZEN_WEEK_END_PLUS),
+        ("ZEN_ESTIVAL", REAL_ZEN_ESTIVAL, EXPECTED_ZEN_ESTIVAL),
+    ],
+)
+def test_tableaux_en_blocs_multi_lignes_reels(offre, tables, attendu):
+    """PDF réels où tout le tableau tient en une ligne aux cellules multi-lignes."""
+    assert grille_depuis_tables(offre, tables).tarifs == attendu
+
+
+def test_bloc_multi_lignes_aux_colonnes_inegales_refuse():
+    """Une colonne plus courte que les autres = valeurs décalées possibles : on refuse."""
+    tables = copy.deepcopy(REAL_ZEN_ESTIVAL)
+    ligne = tables[1][1][3]
+    ligne[2] = "\n".join(ligne[2].split("\n")[:-1])  # 8 prix au lieu de 9
+    with pytest.raises(ValueError, match="même nombre de valeurs"):
+        grille_depuis_tables("ZEN_ESTIVAL", tables)
 
 
 def test_ordre_des_tableaux_sans_importance():

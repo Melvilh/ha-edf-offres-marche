@@ -86,6 +86,96 @@ EXPECTED_ZEN_FIXE = {
     "hc_hp": {p: {"abonnement": a, "prix_kwh_hp": 19.66, "prix_kwh_hc": 15.07} for p, a in _ABO_FIXE_HC.items()},
 }  # fmt: skip
 
+# --- Zen Week-End, Zen Week-End Plus, Zen Estival (PDF réels) -----------------------------
+# Sortie réelle de pdfplumber (rapport outils/verifier_pdf.py du 30/09/2026) : tout le
+# tableau de données tient dans UNE ligne, chaque cellule contenant une colonne entière
+# (valeurs séparées par des retours à la ligne).
+_PUISSANCES_9 = ["3", "6", "9", "12", "15", "18", "24", "30", "36"]
+_ABONNEMENTS_9 = ["12,13", "15,86", "19,88", "23,76", "27,40", "31,14", "39,14", "46,47", "53,88"]
+_PUISSANCES_8, _ABONNEMENTS_8 = _PUISSANCES_9[1:], _ABONNEMENTS_9[1:]
+
+
+def _bloc(puissances: list[str], abonnements: list[str], *prix: str) -> list:
+    """Ligne de données « en bloc » : une cellule par colonne, valeurs séparées par \\n."""
+    n = len(puissances)
+    return ["\n".join(puissances), "\n".join(abonnements), *("\n".join([p] * n) for p in prix)]
+
+
+REAL_ZEN_WEEK_END = [
+    ("", [['', '']]),
+    ("", [['Option Week-End (TTC)', None, None, None],
+          ['Puissance\nsouscrite\n(kVA)', 'Abonnement\nmensuel\n(€/mois)', 'Prix du kWh\n(cts €/kWh)', None],
+          [None, None, 'Heures\nSemaine', 'Heures\nWeek-\nEnd'],
+          _bloc(_PUISSANCES_9, _ABONNEMENTS_9, '22,85', '17,10')]),
+    ("", [['Option Heures Creuses + WE (TTC)', None, None, None, None, None],
+          ['Puissance\nsouscrite\n(kVA)', 'Abonnement\nmensuel\n(€/mois)', 'Prix du kWh\n(cts €/kWh)', None, None, None],
+          [None, None, 'Heures\nPleines\nSemaine', 'Heures\nCreuses\nSemaine', 'Heures\nPleines\nWeek-End', 'Heures\nCreuses\nWeek-End'],
+          _bloc(_PUISSANCES_8, _ABONNEMENTS_8, '23,59', '17,62', '17,62', '17,62')]),
+    ("30 46,47 22,85 17,10\n36 53,88 22,85 17,10",
+     [['Option Flex (TTC)', None, None, None, None, None],
+      ['Puissance\nsouscrite\n(kVA)', 'Abonnement\nmensuel\n(€/mois)', 'Prix du kWh\n(cts €/kWh)', None, None, None],
+      [None, None, 'Heures Creuses\nJour Éco', 'Heures Pleines\nJour Éco', 'Heures Creuses\nJour Sobriété', 'Heures Pleines\nJour Sobriété'],
+      _bloc(_PUISSANCES_8, _ABONNEMENTS_8, '15,95', '21,42', '21,42', '74,67')]),
+]  # fmt: skip
+
+REAL_ZEN_WEEK_END_PLUS = [
+    ("", [['', '']]),
+    ("", [['Option WE + jour choisi* (TTC)', None, None, None, None],
+          ['Puissance\nsouscrite\n(kVA)', 'Abonnement\nmensuel\n(€/mois)', 'Prix du kWh\n(cts €/kWh)', None, None],
+          [None, None, 'Heures\nSemaine', 'Heures\nWeek-\nEnd', 'Heures\n« jour* »'],
+          _bloc(_PUISSANCES_8, _ABONNEMENTS_8, '22,59', '16,91', '16,91')]),
+    ("", [['Option Heures Creuses + WE + jour choisi* (TTC)', None, None, None, None, None, None, None],
+          ['Puissance\nsouscrite\n(kVA)', 'Abonnement\nmensuel\n(€/mois)', 'Prix du kWh\n(cts €/kWh)', None, None, None, None, None],
+          [None, None, 'Heures\nPleines\nSemaine', 'Heures\nCreuses\nSemaine', 'Heures\nPleines\nWeek-\nEnd', 'Heures\nCreuses\nWeek-\nEnd', 'Heures\nPleines\n« jour* »', 'Heures\nCreuses\n« jour* »'],
+          _bloc(_PUISSANCES_8, _ABONNEMENTS_8, '23,14', '17,31', '17,31', '17,31', '17,31', '17,31')]),
+]  # fmt: skip
+
+REAL_ZEN_ESTIVAL = [
+    ("", [['', '']]),
+    ("", [['HEURES SUPER CREUSES ÉTÉ HIVER (TTC)', None, None, None, None, None, None, None],
+          ['Puissance\nsouscrite\n(kVA)', 'Abonnement\nmensuel\n(€/mois)', 'Prix du kWh (cts €/kWh)', None, None, None, None, None],
+          [None, None, 'Heures Super\nCreuses Eté', 'Heures\nCreuses Eté', 'Heures\nPleines Eté', 'Heures Super\nCreuses Hiver', 'Heures\nCreuses Hiver', 'Heures\nPleines Hiver'],
+          _bloc(_PUISSANCES_9, _ABONNEMENTS_9, '9,91', '14,05', '15,88', '19,92', '21,31', '27,22')]),
+]  # fmt: skip
+
+
+def _attendu(puissances, abonnements, **prix) -> dict:
+    """Tarifs attendus : {puissance: {"abonnement": ..., prix...}} (mêmes prix partout)."""
+    return {
+        int(p): {"abonnement": float(a.replace(",", ".")), **prix}
+        for p, a in zip(puissances, abonnements, strict=True)
+    }
+
+
+EXPECTED_ZEN_WEEK_END = {
+    "week_end": _attendu(_PUISSANCES_9, _ABONNEMENTS_9, prix_kwh_semaine=22.85, prix_kwh_weekend=17.10),
+    "hc_week_end": _attendu(
+        _PUISSANCES_8, _ABONNEMENTS_8, prix_kwh_hp_semaine=23.59, prix_kwh_hc_semaine=17.62,
+        prix_kwh_hp_weekend=17.62, prix_kwh_hc_weekend=17.62,
+    ),
+    "flex": _attendu(
+        _PUISSANCES_8, _ABONNEMENTS_8, prix_kwh_hc_eco=15.95, prix_kwh_hp_eco=21.42,
+        prix_kwh_hc_sobriete=21.42, prix_kwh_hp_sobriete=74.67,
+    ),
+}  # fmt: skip
+
+EXPECTED_ZEN_WEEK_END_PLUS = {
+    "we_jour": _attendu(
+        _PUISSANCES_8, _ABONNEMENTS_8, prix_kwh_semaine=22.59, prix_kwh_weekend=16.91, prix_kwh_jour=16.91
+    ),
+    "hc_we_jour": _attendu(
+        _PUISSANCES_8, _ABONNEMENTS_8, prix_kwh_hp_semaine=23.14, prix_kwh_hc_semaine=17.31,
+        prix_kwh_hp_weekend=17.31, prix_kwh_hc_weekend=17.31, prix_kwh_hp_jour=17.31, prix_kwh_hc_jour=17.31,
+    ),
+}  # fmt: skip
+
+EXPECTED_ZEN_ESTIVAL = {
+    "super_creuses": _attendu(
+        _PUISSANCES_9, _ABONNEMENTS_9, prix_kwh_hsc_ete=9.91, prix_kwh_hc_ete=14.05, prix_kwh_hp_ete=15.88,
+        prix_kwh_hsc_hiver=19.92, prix_kwh_hc_hiver=21.31, prix_kwh_hp_hiver=27.22,
+    ),
+}  # fmt: skip
+
 # --- Autres offres : titres décrits (à valider avec les vrais PDF) ---------------------
 # {offre: {option: titre du tableau}}
 SYNTH_TITRES = {

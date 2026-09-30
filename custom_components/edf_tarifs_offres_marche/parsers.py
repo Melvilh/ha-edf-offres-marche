@@ -98,6 +98,42 @@ def _reconnaitre_option(motifs: dict, contexte: str, lignes: list) -> str | None
     return None
 
 
+def _eclater_lignes(option: str, lignes: list) -> list:
+    """Découpe les blocs « une seule ligne aux cellules multi-lignes » en vraies lignes.
+
+    Sur certains PDF (Zen Week-End, Zen Week-End Plus, Zen Estival), pdfplumber renvoie
+    tout le tableau de données en UNE ligne dont chaque cellule contient toutes les
+    valeurs d'une colonne, séparées par des retours à la ligne :
+        ['6\\n9\\n12', '15,86\\n19,88\\n23,76', '22,85\\n22,85\\n22,85', ...]
+    On la transforme en trois lignes normales : ['6', '15,86', '22,85', ...], etc.
+
+    Seule une ligne dont la 1re cellule est une liste d'entiers (les puissances) est
+    découpée : les en-têtes multi-lignes ("Puissance\\nsouscrite\\n(kVA)") sont laissés
+    tels quels. Si les colonnes n'ont pas toutes le même nombre de valeurs, on refuse de
+    deviner (des valeurs décalées donneraient de faux tarifs) : erreur explicite.
+    """
+    resultat: list = []
+    for ligne in lignes:
+        cellules = _cellules_utiles(ligne)
+        if not cellules or not any("\n" in cellule for cellule in cellules):
+            resultat.append(ligne)
+            continue
+
+        colonnes = [cellule.split("\n") for cellule in cellules]
+        if not all(morceau.strip().isdigit() for morceau in colonnes[0]):
+            resultat.append(ligne)  # en-tête ou texte : ignoré plus loin
+            continue
+
+        nombre = len(colonnes[0])
+        if any(len(colonne) != nombre for colonne in colonnes):
+            raise ValueError(
+                f"Tableau {option} : les colonnes n'ont pas le même nombre de valeurs "
+                f"({[len(colonne) for colonne in colonnes]}), lecture impossible"
+            )
+        resultat.extend([colonne[i] for colonne in colonnes] for i in range(nombre))
+    return resultat
+
+
 def _lire_lignes(option: str, lignes: list) -> dict:
     """Lit les lignes de données d'un tableau : {puissance: {"abonnement": ..., prix...}}."""
     cles_prix = OPTIONS[option]["prix"]
@@ -105,7 +141,7 @@ def _lire_lignes(option: str, lignes: list) -> dict:
     resultat: dict[int, dict] = {}
     derniers_prix: list[float] | None = None
 
-    for ligne in lignes:
+    for ligne in _eclater_lignes(option, lignes):
         cellules = _cellules_utiles(ligne)
 
         # Une vraie ligne de donnée commence par la puissance (un entier).
