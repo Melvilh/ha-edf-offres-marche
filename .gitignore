@@ -1,0 +1,16 @@
+# Environnements et caches Python
+venv/
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+
+# Sorties de l'outil de vérification (PDF EDF et rapport) : à ne pas publier
+outils/pdf/
+outils/sortie_verification.txt
+
+# Spécifique au poste de travail
+.vscode/
+_sauvegarde_avant_maj/
+test_parse.py

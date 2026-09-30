@@ -1,0 +1,116 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "EDF contract",
+        "description": "Choose your EDF contract. Prices are read from EDF's public price grid.",
+        "data": {
+          "offre": "Contract"
+        }
+      },
+      "option": {
+        "title": "Tariff option",
+        "description": "Choose the tariff option of your contract.",
+        "data": {
+          "option_tarifaire": "Tariff option"
+        }
+      },
+      "puissance": {
+        "title": "Subscribed power",
+        "description": "Choose the subscribed power of your meter.",
+        "data": {
+          "puissance": "Subscribed power"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Could not download the EDF price grid. Try again in a few minutes.",
+      "pdf_illisible": "The EDF price grid was downloaded but could not be read (its layout may have changed)."
+    },
+    "abort": {
+      "already_configured": "This contract / option / power combination is already configured."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "abonnement": {
+        "name": "Monthly subscription"
+      },
+      "abonnement_jour": {
+        "name": "Daily subscription"
+      },
+      "abonnement_prix_energie": {
+        "name": "Subscription - price for the Energy dashboard"
+      },
+      "abonnement_compteur": {
+        "name": "Subscription - counter for the Energy dashboard"
+      },
+      "prix_kwh": {
+        "name": "Price per kWh"
+      },
+      "prix_kwh_hp": {
+        "name": "Peak hours price per kWh"
+      },
+      "prix_kwh_hc": {
+        "name": "Off-peak hours price per kWh"
+      },
+      "prix_kwh_semaine": {
+        "name": "Weekday price per kWh"
+      },
+      "prix_kwh_weekend": {
+        "name": "Weekend price per kWh"
+      },
+      "prix_kwh_hp_semaine": {
+        "name": "Weekday peak hours price per kWh"
+      },
+      "prix_kwh_hc_semaine": {
+        "name": "Weekday off-peak hours price per kWh"
+      },
+      "prix_kwh_hp_weekend": {
+        "name": "Weekend peak hours price per kWh"
+      },
+      "prix_kwh_hc_weekend": {
+        "name": "Weekend off-peak hours price per kWh"
+      },
+      "prix_kwh_hc_eco": {
+        "name": "Eco day off-peak hours price per kWh"
+      },
+      "prix_kwh_hp_eco": {
+        "name": "Eco day peak hours price per kWh"
+      },
+      "prix_kwh_hc_sobriete": {
+        "name": "Sobriety day off-peak hours price per kWh"
+      },
+      "prix_kwh_hp_sobriete": {
+        "name": "Sobriety day peak hours price per kWh"
+      },
+      "prix_kwh_jour": {
+        "name": "Chosen day price per kWh"
+      },
+      "prix_kwh_hp_jour": {
+        "name": "Chosen day peak hours price per kWh"
+      },
+      "prix_kwh_hc_jour": {
+        "name": "Chosen day off-peak hours price per kWh"
+      },
+      "prix_kwh_hsc_ete": {
+        "name": "Summer super off-peak hours price per kWh"
+      },
+      "prix_kwh_hc_ete": {
+        "name": "Summer off-peak hours price per kWh"
+      },
+      "prix_kwh_hp_ete": {
+        "name": "Summer peak hours price per kWh"
+      },
+      "prix_kwh_hsc_hiver": {
+        "name": "Winter super off-peak hours price per kWh"
+      },
+      "prix_kwh_hc_hiver": {
+        "name": "Winter off-peak hours price per kWh"
+      },
+      "prix_kwh_hp_hiver": {
+        "name": "Winter peak hours price per kWh"
+      }
+    }
+  }
+}

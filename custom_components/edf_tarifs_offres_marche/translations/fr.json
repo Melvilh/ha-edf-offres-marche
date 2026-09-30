@@ -1,0 +1,116 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Contrat EDF",
+        "description": "Choisissez votre contrat EDF. Les tarifs sont lus dans la grille de prix publique d'EDF.",
+        "data": {
+          "offre": "Contrat"
+        }
+      },
+      "option": {
+        "title": "Option tarifaire",
+        "description": "Choisissez l'option tarifaire de votre contrat.",
+        "data": {
+          "option_tarifaire": "Option tarifaire"
+        }
+      },
+      "puissance": {
+        "title": "Puissance souscrite",
+        "description": "Choisissez la puissance souscrite de votre compteur.",
+        "data": {
+          "puissance": "Puissance souscrite"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Impossible de télécharger la grille de prix EDF. Réessayez dans quelques minutes.",
+      "pdf_illisible": "La grille de prix EDF a été téléchargée mais n'a pas pu être lue (sa mise en page a peut-être changé)."
+    },
+    "abort": {
+      "already_configured": "Cette combinaison contrat / option / puissance est déjà configurée."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "abonnement": {
+        "name": "Abonnement mensuel"
+      },
+      "abonnement_jour": {
+        "name": "Abonnement journalier"
+      },
+      "abonnement_prix_energie": {
+        "name": "Abonnement - prix pour le tableau Énergie"
+      },
+      "abonnement_compteur": {
+        "name": "Abonnement - compteur pour le tableau Énergie"
+      },
+      "prix_kwh": {
+        "name": "Prix du kWh"
+      },
+      "prix_kwh_hp": {
+        "name": "Prix du kWh heures pleines"
+      },
+      "prix_kwh_hc": {
+        "name": "Prix du kWh heures creuses"
+      },
+      "prix_kwh_semaine": {
+        "name": "Prix du kWh en semaine"
+      },
+      "prix_kwh_weekend": {
+        "name": "Prix du kWh le week-end"
+      },
+      "prix_kwh_hp_semaine": {
+        "name": "Prix du kWh heures pleines en semaine"
+      },
+      "prix_kwh_hc_semaine": {
+        "name": "Prix du kWh heures creuses en semaine"
+      },
+      "prix_kwh_hp_weekend": {
+        "name": "Prix du kWh heures pleines le week-end"
+      },
+      "prix_kwh_hc_weekend": {
+        "name": "Prix du kWh heures creuses le week-end"
+      },
+      "prix_kwh_hc_eco": {
+        "name": "Prix du kWh heures creuses jour Éco"
+      },
+      "prix_kwh_hp_eco": {
+        "name": "Prix du kWh heures pleines jour Éco"
+      },
+      "prix_kwh_hc_sobriete": {
+        "name": "Prix du kWh heures creuses jour Sobriété"
+      },
+      "prix_kwh_hp_sobriete": {
+        "name": "Prix du kWh heures pleines jour Sobriété"
+      },
+      "prix_kwh_jour": {
+        "name": "Prix du kWh le jour choisi"
+      },
+      "prix_kwh_hp_jour": {
+        "name": "Prix du kWh heures pleines le jour choisi"
+      },
+      "prix_kwh_hc_jour": {
+        "name": "Prix du kWh heures creuses le jour choisi"
+      },
+      "prix_kwh_hsc_ete": {
+        "name": "Prix du kWh heures super creuses été"
+      },
+      "prix_kwh_hc_ete": {
+        "name": "Prix du kWh heures creuses été"
+      },
+      "prix_kwh_hp_ete": {
+        "name": "Prix du kWh heures pleines été"
+      },
+      "prix_kwh_hsc_hiver": {
+        "name": "Prix du kWh heures super creuses hiver"
+      },
+      "prix_kwh_hc_hiver": {
+        "name": "Prix du kWh heures creuses hiver"
+      },
+      "prix_kwh_hp_hiver": {
+        "name": "Prix du kWh heures pleines hiver"
+      }
+    }
+  }
+}
