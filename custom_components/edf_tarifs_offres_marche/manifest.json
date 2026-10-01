@@ -8,5 +8,5 @@
   "iot_class": "cloud_polling",
   "issue_tracker": "https://github.com/Melvilh/ha-edf-offres-marche/issues",
   "requirements": ["pdfplumber>=0.11,<0.12"],
-  "version": "0.2.0"
+  "version": "0.3.0"
 }
